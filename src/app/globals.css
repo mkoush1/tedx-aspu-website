@@ -1,0 +1,548 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 250, 250, 250;
+  --background-end-rgb: 240, 240, 240;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 10, 10, 10;
+  }
+}
+
+* {
+  @apply antialiased;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+}
+
+/* Apple-inspired smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Apple-like font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Apple-inspired animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes glow {
+  0% {
+    filter: brightness(1) blur(5px);
+  }
+  50% {
+    filter: brightness(1.2) blur(7px);
+  }
+  100% {
+    filter: brightness(1) blur(5px);
+  }
+}
+
+/* Mind-blowing loading animations */
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-reverse-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes text-blur-out {
+  0% {
+    filter: blur(0.01px);
+  }
+  100% {
+    filter: blur(6px) opacity(0);
+  }
+}
+
+@keyframes text-blur-in {
+  0% {
+    filter: blur(6px) opacity(0);
+  }
+  100% {
+    filter: blur(0.01px);
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Apple-inspired animation classes */
+.animate-shimmer {
+  animation-name: shimmer;
+  animation-duration: 6s;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-iteration-count: infinite;
+}
+
+.animate-float {
+  animation-name: float;
+  animation-duration: 16s;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-iteration-count: infinite;
+}
+
+.animate-pulse {
+  animation-name: pulse;
+  animation-duration: 3s;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-iteration-count: infinite;
+}
+
+.animate-glow {
+  animation-name: glow;
+  animation-duration: 4s;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-iteration-count: infinite;
+}
+
+.animate-ping-slow {
+  animation-name: ping-slow;
+  animation-duration: 2.5s;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-iteration-count: infinite;
+}
+
+.animate-breathe {
+  animation-name: breathe;
+  animation-duration: 4s;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-iteration-count: infinite;
+}
+
+.animate-rotate-slow {
+  animation-name: rotate-slow;
+  animation-duration: 20s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animate-rotate-reverse-slow {
+  animation-name: rotate-reverse-slow;
+  animation-duration: 25s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animate-scan-line {
+  animation-name: scan-line;
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  animation-iteration-count: infinite;
+}
+
+.animate-text-blur-out {
+  animation-name: text-blur-out;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  animation-fill-mode: forwards;
+}
+
+.animate-text-blur-in {
+  animation-name: text-blur-in;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  animation-fill-mode: forwards;
+}
+
+.animate-glitch {
+  animation-name: glitch;
+  animation-duration: 0.4s;
+  animation-timing-function: steps(5);
+  animation-iteration-count: infinite;
+}
+
+/* Apple-inspired slide down animation */
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* Apple-inspired fade animations */
+@keyframes fade-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-left {
+  animation: fade-left 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes fade-right {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-right {
+  animation: fade-right 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* Apple-inspired parallax effect utility */
+.parallax {
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+  will-change: transform;
+}
+
+/* Apple-inspired premium backdrop blur utilities */
+.backdrop-blur-apple-sm {
+  backdrop-filter: blur(5px) saturate(1.8);
+}
+
+.backdrop-blur-apple {
+  backdrop-filter: blur(10px) saturate(1.8);
+}
+
+.backdrop-blur-apple-lg {
+  backdrop-filter: blur(20px) saturate(1.8);
+}
+
+/* Custom premium gradient text - Apple-inspired */
+.apple-gradient-text {
+  background: linear-gradient(135deg, #fff 20%, rgba(255, 255, 255, 0.65) 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+}
+
+.apple-gradient-text-gold {
+  background: linear-gradient(135deg, #f0c265 20%, #bd9a56 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+}
+
+/* Improved focus styles - Apple-inspired */
+:focus-visible {
+  @apply outline-none ring-2 ring-red-500/50 ring-offset-2 ring-offset-black/10 transition-all duration-300;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto px-4 max-w-7xl;
+  }
+}
+
+@layer utilities {
+  .arabesque {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Original Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  /* New Luxury Animations */
+  .animate-slide-down {
+    animation: slideDown 0.8s ease-out forwards;
+  }
+
+  .animate-fade-left {
+    animation: fadeLeft 0.8s ease-out forwards;
+  }
+
+  .animate-fade-right {
+    animation: fadeRight 0.8s ease-out forwards;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2.5s linear infinite;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  /* Keyframes */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeRight {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 5px rgba(229, 62, 62, 0.3));
+    }
+    50% {
+      filter: drop-shadow(0 0 15px rgba(229, 62, 62, 0.5));
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Add these animations to support the LuxuryEffects components */
+
+  /* Text reveal animation - Apple-inspired */
+  @keyframes textReveal {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .animate-text-reveal {
+    animation-name: textReveal;
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+    animation-fill-mode: forwards;
+  }
+
+  /* Animated gradient background */
+  @keyframes gradientX {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient-x {
+    animation: gradientX 15s ease infinite;
+    background-size: 400% 400%;
+  }
+
+  /* Ultra-premium glass effect */
+  .glass-premium {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+} 
