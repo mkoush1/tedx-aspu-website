@@ -110,20 +110,20 @@ const Hero = () => {
       
       <div className="container mx-auto px-4 sm:px-6 relative z-20 flex flex-col items-center justify-center min-h-[100svh]">
         {/* Main content wrapper */}
-        <div className="flex flex-col items-center justify-center -mt-16 sm:-mt-20">
+        <div className="flex flex-col items-center justify-center -mt-16 sm:-mt-20 fade-transition">
           {/* TEDxASPU Logo */}
           <div className="mb-4 sm:mb-6">
             <div className="flex items-center justify-center">
               <img 
                 src="https://media-hosting.imagekit.io//0175c99f3d9242af/logo-white.png?Expires=1836924074&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=EfdL9paqXHQxuaYE5TxpvCDTGtk09skcFJSYPC4NHSEjkwdaLIO4QH0grD9XBkVF6088uCF67UN67Ne~hsmirDsYNtF2VOazQe8vO5LKfKqxYfEx3bMEaeaA5dixkgWWd4y9HqjgKuLPnRd44QhqLQs0phFNtZk-IlpVoQ6P2gfYfSp5G8w0B6IzxpxqUVJN1G6XCdRkDX~M7zQ3wjaQgeD~woV1fHY7x1ut5ACbDgN3XLTj4dbJnCZl8965KqB31zN0L27mylSC7ecuMqsQpGfj5pb6yFnlg~uQZ9Pr~j0YLnFmQZLII77qAbddEV1iQZNUuSpK47erD6E4QrXGNQ__"
                 alt="TEDxASPU Logo"
-                className="h-12 sm:h-16 md:h-20 w-auto drop-shadow-[0_0_15px_rgba(229,69,69,0.4)]"
+                className="h-12 sm:h-16 md:h-20 w-auto drop-shadow-[0_0_15px_rgba(229,69,69,0.4)] fade-transition"
               />
             </div>
           </div>
           
           {/* IDEAS WORTH SPREADING */}
-          <div className="mb-12 sm:mb-16">
+          <div className="mb-12 sm:mb-16 fade-transition">
             <h3 className="text-xl sm:text-2xl md:text-3xl text-white/90 font-light tracking-wider mb-2">
               Ideas Worth Spreading
             </h3>
@@ -132,58 +132,69 @@ const Hero = () => {
             <div className="w-20 sm:w-24 h-[1px] mx-auto bg-gradient-to-r from-transparent via-red-600/50 to-transparent"></div>
           </div>
 
-          {/* Event Starts In */}
-          <div className="mb-12 sm:mb-16 w-full max-w-xs sm:max-w-2xl md:max-w-3xl">
-            <div className="text-center mb-4 sm:mb-6">
-              <h2 className="text-base sm:text-lg md:text-xl font-light tracking-wider text-white/80">Event Starts In</h2>
+          {/* Event date */}
+          <h2 className="text-lg sm:text-xl text-white/80 font-light tracking-wider mb-6 sm:mb-10 fade-transition">JULY 7, 2025</h2>
+          
+          {/* Countdown Timer */}
+          <div className="grid grid-cols-4 gap-3 sm:gap-4 md:gap-5 mb-8 sm:mb-10 fade-transition">
+            <div className="flex flex-col items-center">
+              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+                <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
+                  {countdown.days}
+                </span>
+              </div>
+              <span className="text-xs sm:text-sm uppercase text-white/70">Days</span>
             </div>
-            
-            {/* Countdown timer */}
-            <div className="flex flex-row justify-center gap-2 sm:gap-4 md:gap-6">
-              <div className="bg-black/30 backdrop-blur-sm p-3 sm:p-4 rounded-sm text-center w-[4.5rem] sm:w-20 md:w-24">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{countdown.days}</div>
-                <div className="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium text-red-300/80">DAYS</div>
+            <div className="flex flex-col items-center">
+              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+                <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
+                  {countdown.hours}
+                </span>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm p-3 sm:p-4 rounded-sm text-center w-[4.5rem] sm:w-20 md:w-24">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{countdown.hours}</div>
-                <div className="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium text-red-300/80">HOURS</div>
+              <span className="text-xs sm:text-sm uppercase text-white/70">Hours</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+                <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
+                  {countdown.minutes}
+                </span>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm p-3 sm:p-4 rounded-sm text-center w-[4.5rem] sm:w-20 md:w-24">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{countdown.minutes}</div>
-                <div className="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium text-red-300/80">MINUTES</div>
+              <span className="text-xs sm:text-sm uppercase text-white/70">Minutes</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+                <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
+                  {countdown.seconds}
+                </span>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm p-3 sm:p-4 rounded-sm text-center w-[4.5rem] sm:w-20 md:w-24">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{countdown.seconds}</div>
-                <div className="text-[8px] sm:text-[10px] uppercase tracking-widest font-medium text-red-300/80">SECONDS</div>
-              </div>
+              <span className="text-xs sm:text-sm uppercase text-white/70">Seconds</span>
             </div>
           </div>
           
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full sm:w-auto px-6 sm:px-0">
-            <a
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto fade-transition">
+            <a 
               href="#tickets"
-              className="w-full sm:w-auto bg-red-700 hover:bg-red-800 text-white py-3 sm:py-2.5 px-6 rounded-full flex items-center justify-center gap-2 transition-colors duration-300 text-sm font-medium"
+              className="bg-gradient-to-r from-red-700 to-red-600 text-white py-3 px-8 rounded-full font-medium hover:shadow-[0_0_15px_rgba(229,69,69,0.5)] transition-all duration-300 text-center"
             >
-              <Ticket className="w-4 h-4" />
-              Purchase Tickets
+              Get Tickets
             </a>
-            
-            <a
-              href="#about"
-              className="w-full sm:w-auto bg-black/30 hover:bg-black/40 text-white py-3 sm:py-2.5 px-6 rounded-full border border-white/10 flex items-center justify-center gap-2 transition-colors duration-300 text-sm font-medium"
-            >
-              <Info className="w-4 h-4" />
-              Learn More
-            </a>
-          </div>
+          <a
+            href="#about"
+              className="border border-white/20 bg-black/30 backdrop-blur-sm text-white py-3 px-8 rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-center"
+          >
+            Learn More
+          </a>
         </div>
-        
+      </div>
+
         {/* Scroll indicator */}
-        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-60">
-          <div className="text-[10px] tracking-[0.2em] font-light mb-2">SCROLL</div>
-          <div className="w-[1px] h-4 sm:h-5">
-            <div className="w-[1px] h-2 bg-white rounded-full animate-bounce"></div>
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 fade-transition">
+          <div className="flex flex-col items-center text-white/50 text-sm animate-pulse">
+            <span>Scroll</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
           </div>
         </div>
       </div>

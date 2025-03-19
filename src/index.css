@@ -173,3 +173,47 @@ h1, h2, h3, h4, h5, h6 {
   outline: 2px solid rgba(229, 69, 69, 0.5);
   outline-offset: 2px;
 }
+
+/* Mobile optimized transitions */
+@media (max-width: 768px) {
+  /* Use simpler fade transitions on mobile for better performance */
+  .animate-shimmer,
+  .animate-ping-slow,
+  .animate-float,
+  .animate-pulse {
+    animation: simpleFade 1.5s ease-in-out infinite alternate;
+  }
+  
+  .transition-all {
+    transition-property: opacity, transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease-out;
+  }
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion) {
+    .animate-shimmer,
+    .animate-ping-slow,
+    .animate-float,
+    .animate-pulse,
+    .animate-bounce {
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+}
+
+/* Simple fade animation for mobile */
+@keyframes simpleFade {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Optimize transitions for all devices */
+.fade-transition {
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}

@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { ScrollAnimation } from './BackgroundPattern';
-
-// Apple-inspired decorative element component
-const LuxuryDivider = ({ className = '' }) => (
-  <div className={`relative flex items-center justify-center ${className}`}>
-    <div className="h-px w-16 bg-gradient-to-r from-transparent via-red-500/60 to-transparent"></div>
-    <div className="mx-3">
-      <div className="w-1 h-1 bg-red-500/60 rounded-full"></div>
-    </div>
-    <div className="h-px w-16 bg-gradient-to-l from-transparent via-red-500/60 to-transparent"></div>
-  </div>
-);
+import { Plus as PlusIcon, Minus as MinusIcon } from 'lucide-react';
+import LuxuryDivider from './LuxuryDivider';
 
 const faqs = [
   {
@@ -49,120 +38,67 @@ const faqs = [
 ];
 
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  
+  const toggleFaq = (index: number) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+  
   return (
-    <section id="faq" className="py-24 bg-black text-white relative overflow-hidden">
-      {/* Premium subtle grid overlay - Apple style */}
-      <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none">
-        <div className="w-full h-full" style={{
-          backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}></div>
+    <section id="faq" className="relative bg-black text-white py-20 overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-black/90 z-10"></div>
       </div>
       
-      {/* Luxury radial gradients */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-radial from-red-900/5 to-transparent rounded-full opacity-30 blur-2xl"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-radial from-red-900/5 to-transparent rounded-full opacity-30 blur-2xl"></div>
-      
-      {/* Apple-style decorative lines */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent"></div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-        <ScrollAnimation animation="luxury-fade">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-light text-white mb-3 tracking-tight">
-              <span className="font-medium">Frequently Asked</span> <span className="font-light">Questions</span>
-            </h2>
-            <LuxuryDivider className="mx-auto mb-6" />
-            <p className="text-lg text-white/80 max-w-3xl mx-auto font-light tracking-wide">
-              Everything you need to know about TEDxASPU 2025. Can't find your answer? Feel free to contact us.
-            </p>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 fade-transition">
+          <div className="inline-block">
+            <LuxuryDivider />
           </div>
-        </ScrollAnimation>
-
-        <div className="max-w-3xl mx-auto space-y-4">
-          {faqs.map((faq, index) => (
-            <ScrollAnimation 
-              key={index} 
-              animation="fade-up" 
-              delay={index * 100} 
-              threshold={0.1}
-            >
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-wider mt-6 mb-4">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto">
+            Find answers to the most common questions about TEDxASPU 2025.
+          </p>
+        </div>
+      
+        <div className="max-w-3xl mx-auto fade-transition">
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
               <div 
-                className={`
-                  relative bg-black/40 backdrop-blur-lg border border-white/5 rounded-xl overflow-hidden transition-all duration-500
-                  ${openIndex === index ? 'shadow-luxury-md' : 'shadow-luxury-sm'}
-                `}
+                key={index}
+                className={`border border-red-500/10 rounded-lg bg-gradient-to-b from-black/80 to-red-950/10 overflow-hidden transition-all duration-300 ${
+                  activeIndex === index ? 'shadow-[0_0_15px_rgba(229,69,69,0.15)]' : ''
+                }`}
               >
-                {/* Decorative corner accent - only on active item */}
-                {openIndex === index && (
-                  <>
-                    <div className="absolute top-0 left-0 w-8 h-8 overflow-hidden">
-                      <div className="absolute top-0 left-0 w-px h-8 bg-gradient-to-b from-red-500/40 to-transparent"></div>
-                      <div className="absolute top-0 left-0 w-8 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
-                    </div>
-                    <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden">
-                      <div className="absolute top-0 right-0 w-px h-8 bg-gradient-to-b from-red-500/40 to-transparent"></div>
-                      <div className="absolute top-0 right-0 w-8 h-px bg-gradient-to-l from-red-500/40 to-transparent"></div>
-                    </div>
-                  </>
-                )}
-                
                 <button
-                  className="w-full flex items-center justify-between p-6 text-left"
-                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  onClick={() => toggleFaq(index)}
+                  className="flex justify-between items-center w-full p-4 sm:p-6 text-left"
                 >
-                  <span className="text-lg font-light text-white pr-8 tracking-wide">{faq.question}</span>
-                  <span className={`
-                    relative flex-shrink-0 ml-4 p-3 rounded-full transition-all duration-500
-                    ${openIndex === index ? 'bg-red-900/10 text-red-400' : 'bg-white/5 text-white/60'}
-                  `}>
-                    {openIndex === index ? (
-                      <ChevronUp className="w-5 h-5" />
+                  <h3 className="text-base sm:text-lg font-medium text-white pr-4">{faq.question}</h3>
+                  <span className="text-red-500 flex-shrink-0">
+                    {activeIndex === index ? (
+                      <MinusIcon className="w-5 h-5" />
                     ) : (
-                      <ChevronDown className="w-5 h-5" />
-                    )}
-                    {openIndex === index && (
-                      <div className="absolute inset-0 bg-red-500/5 rounded-full blur-md"></div>
+                      <PlusIcon className="w-5 h-5" />
                     )}
                   </span>
                 </button>
                 <div 
-                  className={`
-                    overflow-hidden transition-all duration-500 ease-in-out
-                    ${openIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}
-                  `}
+                  className={`overflow-hidden transition-all duration-300 ${
+                    activeIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
                 >
-                  <div className="p-6 pt-0 text-white/70 font-light leading-relaxed tracking-wide border-t border-white/5">
+                  <div className="p-4 sm:p-6 pt-0 sm:pt-0 text-white/70">
                     {faq.answer}
                   </div>
                 </div>
               </div>
-            </ScrollAnimation>
-          ))}
-        </div>
-
-        <ScrollAnimation animation="fade-up" delay={faqs.length * 100 + 200}>
-          <div className="text-center mt-20">
-            <p className="text-white/60 mb-8 font-light tracking-wide">Still have questions?</p>
-            <a 
-              href="#contact" 
-              className="group relative overflow-hidden inline-flex"
-            >
-              <div className="absolute inset-0 rounded-full bg-red-600 blur-sm opacity-30 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <div className="relative overflow-hidden rounded-full bg-gradient-to-br from-red-700 to-red-800 px-8 py-4 text-white text-lg font-medium tracking-wide text-center transform group-hover:scale-[1.03] transition-all duration-300">
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  Contact Us
-                </span>
-                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <span className="absolute inset-0 bg-gradient-to-br from-red-800 to-red-900"></span>
-                </span>
-              </div>
-            </a>
+            ))}
           </div>
-        </ScrollAnimation>
+        </div>
       </div>
     </section>
   );

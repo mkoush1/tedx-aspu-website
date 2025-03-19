@@ -1,17 +1,7 @@
 import React from 'react';
 import { Play, ThumbsUp, Eye } from 'lucide-react';
 import { ScrollAnimation } from './BackgroundPattern';
-
-// Apple-inspired decorative element component
-const LuxuryDivider = ({ className = '' }) => (
-  <div className={`relative flex items-center justify-center ${className}`}>
-    <div className="h-px w-16 bg-gradient-to-r from-transparent via-red-500/60 to-transparent"></div>
-    <div className="mx-3">
-      <div className="w-1 h-1 bg-red-500/60 rounded-full"></div>
-    </div>
-    <div className="h-px w-16 bg-gradient-to-l from-transparent via-red-500/60 to-transparent"></div>
-  </div>
-);
+import LuxuryDivider from './LuxuryDivider';
 
 const featuredTalks = [
   {
@@ -54,37 +44,24 @@ const featuredTalks = [
 
 const PastTalks = () => {
   return (
-    <section id="past-talks" className="py-24 bg-black text-white relative overflow-hidden">
-      {/* Premium subtle grid overlay - Apple style */}
-      <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none">
-        <div className="w-full h-full" style={{
-          backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}></div>
+    <section id="past-talks" className="relative bg-black text-white py-20 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-black/90 z-10"></div>
       </div>
-      
-      {/* Luxury radial gradients */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-radial from-red-900/5 to-transparent rounded-full opacity-30 blur-2xl"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-radial from-red-900/5 to-transparent rounded-full opacity-30 blur-2xl"></div>
-      
-      {/* Apple-style decorative lines */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/20 to-transparent"></div>
-      
-      <div className="container mx-auto px-4 relative z-20">
-        <ScrollAnimation animation="luxury-fade">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-light text-white mb-3 tracking-tight">
-              <span className="font-medium">Past</span> <span className="font-light">Talks</span>
-            </h2>
-            <LuxuryDivider className="mx-auto mb-6" />
-            <p className="text-lg text-white/80 max-w-3xl mx-auto font-light tracking-wide">
-              Explore our collection of inspiring talks from previous TEDxASPU events that continue to spark conversations and inspire change.
-            </p>
-          </div>
-        </ScrollAnimation>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 fade-transition">
+          <div className="inline-block">
+            <LuxuryDivider />
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-wider mt-6 mb-4">Featured Talks</h2>
+          <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto">
+            Explore the most impactful talks from previous TEDxASPU events that have inspired our community.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 fade-transition">
           {featuredTalks.map((talk, index) => (
             <ScrollAnimation 
               key={talk.id} 

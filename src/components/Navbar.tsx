@@ -136,7 +136,7 @@ const Navbar = () => {
                   Get Tickets
                 </span>
               </button>
-            </div>
+        </div>
 
             {/* Mobile Menu Toggle */}
             <button 
@@ -149,10 +149,10 @@ const Navbar = () => {
               ) : (
                 <Menu className="h-6 w-6 text-white" />
               )}
-            </button>
-          </div>
+        </button>
+      </div>
         </div>
-      </nav>
+    </nav>
 
       {/* Mobile Menu Overlay - Full Screen */}
       <div 
