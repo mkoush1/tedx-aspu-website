@@ -11,8 +11,27 @@ import Footer from './components/Footer';
 import BackgroundPattern from './components/BackgroundPattern';
 
 function App() {
-  // Enhanced scroll experience with subtle parallax effect
+  // Check if device is mobile
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Check on initial load
+    checkMobile();
+    
+    // Add window resize listener
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Enhanced scroll experience with subtle parallax effect - disabled on mobile
   const handleScroll = () => {
+    // Skip parallax effects on mobile for better performance
+    if (isMobile) return;
+    
     const scrollPosition = window.scrollY;
     const elements = document.querySelectorAll('.parallax-element');
     
@@ -29,18 +48,33 @@ function App() {
     });
   };
   
-  // Setup scroll handler
+  // Setup scroll handler with debounce for better performance
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    let scrollTimeout: number | null = null;
+    
+    const onScroll = () => {
+      if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
+      }
+      
+      scrollTimeout = window.requestAnimationFrame(() => {
+        handleScroll();
+      });
+    };
+    
+    window.addEventListener('scroll', onScroll);
     
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', onScroll);
+      if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
+      }
     };
-  }, []);
+  }, [isMobile]);
   
   return (
     <div className="min-h-screen bg-black text-white relative">
-      <BackgroundPattern />
+      <BackgroundPattern isMobile={isMobile} />
       <Navbar />
       <main className="relative z-10">
         <Hero />

@@ -14,16 +14,20 @@ const LuxuryOrnament = ({ className = '' }) => (
 );
 
 // Apple-inspired premium countdown unit for luxury styling
-const CountdownUnit = ({ value, label, delay }) => (
+const CountdownUnit = ({ value, label, delay, isMobile }) => (
   <div 
-    className="relative group bg-gradient-to-b from-black/70 to-black/50 backdrop-blur-xl p-4 sm:p-6 rounded-2xl text-center overflow-hidden shadow-luxury-md animate-slide-up" 
-    style={{animationDelay: `${delay}ms`}}
+    className={`relative group bg-gradient-to-b from-black/70 to-black/50 ${!isMobile ? 'backdrop-blur-xl' : ''} p-4 sm:p-6 rounded-2xl text-center overflow-hidden ${!isMobile ? 'shadow-luxury-md animate-slide-up' : ''}`}
+    style={!isMobile ? {animationDelay: `${delay}ms`} : {}}
   >
     {/* Subtle corner dots */}
-    <div className="absolute top-2 left-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
-    <div className="absolute top-2 right-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
-    <div className="absolute bottom-2 left-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
-    <div className="absolute bottom-2 right-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
+    {!isMobile && (
+      <>
+        <div className="absolute top-2 left-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
+        <div className="absolute top-2 right-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
+        <div className="absolute bottom-2 left-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
+        <div className="absolute bottom-2 right-2 w-0.5 h-0.5 rounded-full bg-red-500/40"></div>
+      </>
+    )}
     
     {/* Decorative borders */}
     <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-600/40 to-transparent"></div>
@@ -32,11 +36,11 @@ const CountdownUnit = ({ value, label, delay }) => (
     <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-red-600/20 to-transparent"></div>
     
     {/* Content with premium typography */}
-    <div className="text-4xl sm:text-5xl md:text-6xl font-bold mb-1 text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-red-100 tracking-tight">{value}</div>
+    <div className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-1 ${!isMobile ? 'text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-red-100' : 'text-white'} tracking-tight`}>{value}</div>
     <div className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-medium text-red-300/90">{label}</div>
     
-    {/* Apple-style hover effect */}
-    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-t from-red-900/10 to-transparent transition-opacity duration-700"></div>
+    {/* Apple-style hover effect - desktop only */}
+    {!isMobile && <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-t from-red-900/10 to-transparent transition-opacity duration-700"></div>}
   </div>
 );
 
@@ -47,6 +51,20 @@ const Hero = () => {
     minutes: 0,
     seconds: 0
   });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Check on initial load
+    checkMobile();
+    
+    // Add window resize listener
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const targetDate = new Date('2025-07-07T00:00:00');
@@ -64,10 +82,12 @@ const Hero = () => {
     };
 
     updateCountdown();
-    const timer = setInterval(updateCountdown, 1000);
+    
+    // On mobile, update less frequently to reduce redraws
+    const timer = setInterval(updateCountdown, isMobile ? 5000 : 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isMobile]);
 
   return (
     <section id="hero" className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden text-white">
@@ -75,38 +95,43 @@ const Hero = () => {
       <div className="absolute inset-0 z-0 overflow-hidden">
         <iframe
           className="absolute w-[calc(100%+200px)] sm:w-[calc(100%+300px)] h-[calc(100%+200px)] sm:h-[calc(100%+300px)] -top-[100px] sm:-top-[150px] -left-[100px] sm:-left-[150px] min-w-[200%] min-h-[200%] max-w-none max-h-none opacity-90"
-          src="https://www.youtube.com/embed/KZwbDOCi4xw?autoplay=1&mute=1&controls=0&showinfo=0&start=56&end=87&loop=1&playlist=KZwbDOCi4xw&disablekb=1&modestbranding=1&iv_load_policy=3&cc_load_policy=0"
+          src={`https://www.youtube.com/embed/KZwbDOCi4xw?autoplay=1&mute=1&controls=0&showinfo=0&start=56&end=87&loop=1&playlist=KZwbDOCi4xw&disablekb=1&modestbranding=1&iv_load_policy=3&cc_load_policy=0${isMobile ? '&playsinline=1' : ''}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           frameBorder="0"
           style={{
-            filter: 'brightness(0.3) contrast(1.3) saturate(1.1)',
+            filter: isMobile ? 'brightness(0.3)' : 'brightness(0.3) contrast(1.3) saturate(1.1)',
             border: 'none',
             objectFit: 'cover',
             position: 'absolute',
-            transform: 'scale(1.2)',
+            transform: isMobile ? 'none' : 'scale(1.2)',
           }}
+          loading="lazy"
         ></iframe>
       </div>
       
-      {/* Premium subtle grid overlay - Apple style */}
-      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
-        <div className="w-full h-full" style={{
-          backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}></div>
-      </div>
+      {/* Premium subtle grid overlay - Apple style - desktop only */}
+      {!isMobile && (
+        <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
+          <div className="w-full h-full" style={{
+            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+      )}
       
-      {/* Apple-inspired scanline effect */}
-      <LuxuryScanline color="white/3" speed={5} />
+      {/* Apple-inspired scanline effect - desktop only */}
+      {!isMobile && <LuxuryScanline color="white/3" speed={5} />}
       
-      {/* Luxury Corner Accents */}
-      <LuxuryCornerAccents color="red-500/30" size={32} className="w-full h-full absolute inset-0 z-10 pointer-events-none" />
+      {/* Luxury Corner Accents - desktop only */}
+      {!isMobile && <LuxuryCornerAccents color="red-500/30" size={32} className="w-full h-full absolute inset-0 z-10 pointer-events-none" />}
       
-      {/* Background animated gradient */}
-      <LuxuryAnimatedGradient 
-        className="absolute inset-0 z-5 opacity-30" 
-        colors={['rgba(139,0,0,0.15)', 'rgba(0,0,0,0)']} 
-      />
+      {/* Background animated gradient - desktop only */}
+      {!isMobile && (
+        <LuxuryAnimatedGradient 
+          className="absolute inset-0 z-5 opacity-30" 
+          colors={['rgba(139,0,0,0.15)', 'rgba(0,0,0,0)']} 
+        />
+      )}
       
       <div className="container mx-auto px-4 sm:px-6 relative z-20 flex flex-col items-center justify-center min-h-[100svh]">
         {/* Main content wrapper */}
@@ -117,7 +142,10 @@ const Hero = () => {
               <img 
                 src="https://media-hosting.imagekit.io//0175c99f3d9242af/logo-white.png?Expires=1836924074&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=EfdL9paqXHQxuaYE5TxpvCDTGtk09skcFJSYPC4NHSEjkwdaLIO4QH0grD9XBkVF6088uCF67UN67Ne~hsmirDsYNtF2VOazQe8vO5LKfKqxYfEx3bMEaeaA5dixkgWWd4y9HqjgKuLPnRd44QhqLQs0phFNtZk-IlpVoQ6P2gfYfSp5G8w0B6IzxpxqUVJN1G6XCdRkDX~M7zQ3wjaQgeD~woV1fHY7x1ut5ACbDgN3XLTj4dbJnCZl8965KqB31zN0L27mylSC7ecuMqsQpGfj5pb6yFnlg~uQZ9Pr~j0YLnFmQZLII77qAbddEV1iQZNUuSpK47erD6E4QrXGNQ__"
                 alt="TEDxASPU Logo"
-                className="h-12 sm:h-16 md:h-20 w-auto drop-shadow-[0_0_15px_rgba(229,69,69,0.4)] fade-transition"
+                className={`h-12 sm:h-16 md:h-20 w-auto ${!isMobile ? 'drop-shadow-[0_0_15px_rgba(229,69,69,0.4)]' : ''} fade-transition`}
+                loading="eager"
+                width={isMobile ? 120 : 180}
+                height={isMobile ? 40 : 60}
               />
             </div>
           </div>
@@ -138,7 +166,7 @@ const Hero = () => {
           {/* Countdown Timer */}
           <div className="grid grid-cols-4 gap-3 sm:gap-4 md:gap-5 mb-8 sm:mb-10 fade-transition">
             <div className="flex flex-col items-center">
-              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+              <div className={`${isMobile ? 'bg-black/60' : 'bg-black/30 backdrop-blur-sm'} border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2`}>
                 <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
                   {countdown.days}
                 </span>
@@ -146,7 +174,7 @@ const Hero = () => {
               <span className="text-xs sm:text-sm uppercase text-white/70">Days</span>
             </div>
             <div className="flex flex-col items-center">
-              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+              <div className={`${isMobile ? 'bg-black/60' : 'bg-black/30 backdrop-blur-sm'} border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2`}>
                 <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
                   {countdown.hours}
                 </span>
@@ -154,7 +182,7 @@ const Hero = () => {
               <span className="text-xs sm:text-sm uppercase text-white/70">Hours</span>
             </div>
             <div className="flex flex-col items-center">
-              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+              <div className={`${isMobile ? 'bg-black/60' : 'bg-black/30 backdrop-blur-sm'} border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2`}>
                 <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
                   {countdown.minutes}
                 </span>
@@ -162,7 +190,7 @@ const Hero = () => {
               <span className="text-xs sm:text-sm uppercase text-white/70">Minutes</span>
             </div>
             <div className="flex flex-col items-center">
-              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2">
+              <div className={`${isMobile ? 'bg-black/60' : 'bg-black/30 backdrop-blur-sm'} border border-white/10 rounded-lg px-2 sm:px-4 py-2 sm:py-3 w-16 sm:w-20 md:w-24 text-center mb-1 sm:mb-2`}>
                 <span className="text-xl sm:text-2xl md:text-3xl font-light text-white">
                   {countdown.seconds}
                 </span>
@@ -175,22 +203,22 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto fade-transition">
             <a 
               href="#tickets"
-              className="bg-gradient-to-r from-red-700 to-red-600 text-white py-3 px-8 rounded-full font-medium hover:shadow-[0_0_15px_rgba(229,69,69,0.5)] transition-all duration-300 text-center"
+              className={`bg-gradient-to-r from-red-700 to-red-600 text-white py-3 px-8 rounded-full font-medium ${!isMobile ? 'hover:shadow-[0_0_15px_rgba(229,69,69,0.5)]' : ''} transition-all duration-300 text-center`}
             >
               Get Tickets
             </a>
           <a
             href="#about"
-              className="border border-white/20 bg-black/30 backdrop-blur-sm text-white py-3 px-8 rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-center"
+              className={`border border-white/20 ${isMobile ? 'bg-black/60' : 'bg-black/30 backdrop-blur-sm'} text-white py-3 px-8 rounded-full font-medium ${!isMobile ? 'hover:bg-white/10' : ''} transition-all duration-300 text-center`}
           >
             Learn More
           </a>
         </div>
       </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - simplified on mobile */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 fade-transition">
-          <div className="flex flex-col items-center text-white/50 text-sm animate-pulse">
+          <div className={`flex flex-col items-center text-white/50 text-sm ${!isMobile ? 'animate-pulse' : ''}`}>
             <span>Scroll</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
