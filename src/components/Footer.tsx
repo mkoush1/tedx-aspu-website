@@ -112,7 +112,7 @@ const Footer = () => {
               </a>
               
               <a
-                href="https://www.facebook.com/TEDxASPU/"
+                href="https://www.facebook.com/share/16F2R3yrxb/?mibextid=wwXIfr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative"
@@ -125,7 +125,7 @@ const Footer = () => {
               </a>
               
               <a
-                href="https://www.instagram.com/tedxaspu/"
+                href="https://www.instagram.com/tedxaspu25/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative"

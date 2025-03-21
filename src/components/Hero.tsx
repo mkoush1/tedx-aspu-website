@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowBigDown, Calendar, MapPin, Ticket, Info } from 'lucide-react';
 import { LuxuryCornerAccents, LuxuryScanline, LuxuryTextReveal, LuxuryAnimatedGradient, LuxuryHighlight } from './LuxuryEffects';
 
@@ -52,6 +52,25 @@ const Hero = () => {
     seconds: 0
   });
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const videoRef = useRef(null);
+  const heroRef = useRef(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    // Mark component as loaded
+    setIsLoaded(true);
+    
+    // Set up scroll detection - only need to know if user has scrolled at all
+    const handleScroll = () => {
+      if (!hasScrolled && window.scrollY > 50) {
+        setHasScrolled(true);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasScrolled]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -84,16 +103,18 @@ const Hero = () => {
     updateCountdown();
     
     // On mobile, update less frequently to reduce redraws
-    const timer = setInterval(updateCountdown, isMobile ? 5000 : 1000);
+    // Only update seconds if user hasn't scrolled yet to save resources
+    const timer = setInterval(updateCountdown, isMobile || hasScrolled ? 5000 : 1000);
 
     return () => clearInterval(timer);
-  }, [isMobile]);
+  }, [isMobile, hasScrolled]);
 
   return (
-    <section id="hero" className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden text-white">
+    <section id="hero" ref={heroRef} className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden text-white">
       {/* YouTube background video with enhanced styling */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <iframe
+          ref={videoRef}
           className="absolute w-[calc(100%+200px)] sm:w-[calc(100%+300px)] h-[calc(100%+200px)] sm:h-[calc(100%+300px)] -top-[100px] sm:-top-[150px] -left-[100px] sm:-left-[150px] min-w-[200%] min-h-[200%] max-w-none max-h-none opacity-90"
           src={`https://www.youtube.com/embed/KZwbDOCi4xw?autoplay=1&mute=1&controls=0&showinfo=0&start=56&end=87&loop=1&playlist=KZwbDOCi4xw&disablekb=1&modestbranding=1&iv_load_policy=3&cc_load_policy=0${isMobile ? '&playsinline=1' : ''}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -105,7 +126,7 @@ const Hero = () => {
             position: 'absolute',
             transform: isMobile ? 'none' : 'scale(1.2)',
           }}
-          loading="lazy"
+          loading="eager"
         ></iframe>
       </div>
       
@@ -120,13 +141,13 @@ const Hero = () => {
       )}
       
       {/* Apple-inspired scanline effect - desktop only */}
-      {!isMobile && <LuxuryScanline color="white/3" speed={5} />}
+      {!isMobile && isLoaded && <LuxuryScanline color="white/3" speed={5} />}
       
       {/* Luxury Corner Accents - desktop only */}
-      {!isMobile && <LuxuryCornerAccents color="red-500/30" size={32} className="w-full h-full absolute inset-0 z-10 pointer-events-none" />}
+      {!isMobile && isLoaded && <LuxuryCornerAccents color="red-500/30" size={32} className="w-full h-full absolute inset-0 z-10 pointer-events-none" />}
       
       {/* Background animated gradient - desktop only */}
-      {!isMobile && (
+      {!isMobile && isLoaded && (
         <LuxuryAnimatedGradient 
           className="absolute inset-0 z-5 opacity-30" 
           colors={['rgba(139,0,0,0.15)', 'rgba(0,0,0,0)']} 

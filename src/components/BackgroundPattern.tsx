@@ -92,6 +92,7 @@ export default BackgroundPattern;
 // Luxury-enhanced ScrollAnimation utility component
 export const ScrollAnimation = ({ children, animation = 'fade-up', delay = 0, threshold = 0.1, className = '' }) => {
   const [isVisible, setIsVisible] = React.useState(false);
+  const [hasAnimated, setHasAnimated] = React.useState(false);
   const domRef = React.useRef();
   const [isMobile, setIsMobile] = React.useState(false);
   
@@ -107,6 +108,9 @@ export const ScrollAnimation = ({ children, animation = 'fade-up', delay = 0, th
   }, []);
 
   React.useEffect(() => {
+    // Only observe if hasn't animated yet
+    if (hasAnimated) return;
+    
     // Use different thresholds for mobile vs desktop
     const actualThreshold = isMobile ? Math.min(threshold, 0.05) : threshold;
     
@@ -114,6 +118,7 @@ export const ScrollAnimation = ({ children, animation = 'fade-up', delay = 0, th
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          setHasAnimated(true); // Mark this animation as completed
           observer.unobserve(entry.target);
         }
       });
@@ -129,7 +134,7 @@ export const ScrollAnimation = ({ children, animation = 'fade-up', delay = 0, th
         observer.unobserve(currentRef);
       }
     };
-  }, [threshold, isMobile]);
+  }, [threshold, isMobile, hasAnimated]);
 
   // Simplified animation classes for mobile
   const getMobileAnimationClass = (animation) => {
@@ -209,11 +214,12 @@ export const ScrollAnimation = ({ children, animation = 'fade-up', delay = 0, th
   return (
     <div
       ref={domRef}
-      className={`${className} ${animationClass} ${isVisible ? visibleClass : ''}`}
+      className={`${className} ${animationClass} ${isVisible ? visibleClass : ''} ${hasAnimated ? 'loaded-animation' : ''}`}
       style={{ 
         transitionDelay: `${isMobile ? Math.min(delay, 100) : delay}ms`,
         willChange: isMobile ? 'opacity' : 'transform, opacity'
       }}
+      data-animation-state={isVisible ? 'visible' : 'hidden'}
     >
       {children}
     </div>
