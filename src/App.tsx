@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -10,43 +10,96 @@ import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import BackgroundPattern from './components/BackgroundPattern';
 
+// Custom hooks for better performance
+const useThrottledValue = (value: any, limit: number) => {
+  const [throttledValue, setThrottledValue] = useState(value);
+  const lastRan = useRef(Date.now());
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (Date.now() - lastRan.current >= limit) {
+        setThrottledValue(value);
+        lastRan.current = Date.now();
+      }
+    }, limit - (Date.now() - lastRan.current));
+
+    return () => clearTimeout(handler);
+  }, [value, limit]);
+
+  return throttledValue;
+};
+
 function App() {
-  // Check if device is mobile
+  // State management with performance optimizations
   const [isMobile, setIsMobile] = useState(false);
-  // Track if initial load is complete
+  const [isTablet, setIsTablet] = useState(false);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  // Track scroll position to optimize rendering
   const [scrollPosition, setScrollPosition] = useState(0);
-  // Ref to track if an element is in viewport
+  const throttledScrollPosition = useThrottledValue(scrollPosition, 50);
   const observerRefs = useRef(new Map());
-  // Track active sections for animation optimization
   const [activeSections, setActiveSections] = useState(new Set(['hero']));
+  const [devicePerformance, setDevicePerformance] = useState('high'); // 'low', 'medium', 'high'
   
+  // Check device type and performance capabilities on mount
   useEffect(() => {
-    // Mark initial load as complete after a short delay
-    const timer = setTimeout(() => {
-      setInitialLoadComplete(true);
-    }, 2000);
+    // Check device type
+    const checkDeviceType = () => {
+      const width = window.innerWidth;
+      setIsMobile(width <= 768);
+      setIsTablet(width > 768 && width <= 1024);
+    };
     
-    return () => clearTimeout(timer);
-  }, []);
-  
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+    // Check device performance
+    const checkDevicePerformance = () => {
+      const userAgent = navigator.userAgent.toLowerCase();
+      
+      // Simple performance estimation based on device
+      if (/(iphone|ipod|android)/.test(userAgent) && !/(ipad|tablet)/.test(userAgent)) {
+        // Most mobile phones
+        setDevicePerformance('low');
+      } else if (/(ipad|android(?!.*mobile))/.test(userAgent) || isTablet) {
+        // Tablets and mid-range devices
+        setDevicePerformance('medium');
+      } else {
+        // Desktops and high-end devices
+        setDevicePerformance('high');
+      }
+      
+      // Further refine based on memory (if available)
+      if ('deviceMemory' in navigator) {
+        const memory = (navigator as any).deviceMemory;
+        if (memory <= 2) setDevicePerformance('low');
+        else if (memory <= 4) setDevicePerformance('medium');
+        else setDevicePerformance('high');
+      }
     };
     
     // Check on initial load
-    checkMobile();
+    checkDeviceType();
+    checkDevicePerformance();
+    
+    // Mark initial load as complete after a short delay
+    const timer = setTimeout(() => {
+      setInitialLoadComplete(true);
+      document.body.classList.add('loaded');
+    }, 1000);
     
     // Add window resize listener
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+    window.addEventListener('resize', checkDeviceType);
+    return () => {
+      window.removeEventListener('resize', checkDeviceType);
+      clearTimeout(timer);
+    };
+  }, [isTablet]);
 
-  // Setup IntersectionObserver to track visible sections
+  // Setup IntersectionObserver to track visible sections with optimized options
   useEffect(() => {
-    const observerCallback = (entries) => {
+    const observerOptions = {
+      rootMargin: '0px',
+      threshold: isMobile ? 0.05 : 0.1 // Lower threshold for mobile for better performance
+    };
+    
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach(entry => {
         const sectionId = entry.target.id;
         if (entry.isIntersecting) {
@@ -55,20 +108,23 @@ function App() {
             updated.add(sectionId);
             return updated;
           });
+          
+          // Add active class for CSS targeting
+          entry.target.classList.add('section-active');
         } else {
           setActiveSections(prev => {
             const updated = new Set(prev);
             updated.delete(sectionId);
             return updated;
           });
+          
+          // Remove active class
+          entry.target.classList.remove('section-active');
         }
       });
     };
     
-    const observer = new IntersectionObserver(observerCallback, {
-      rootMargin: '0px',
-      threshold: 0.1
-    });
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
     
     // Observe all sections
     document.querySelectorAll('section[id]').forEach(section => {
@@ -82,58 +138,56 @@ function App() {
         if (element) observer.unobserve(element);
       });
     };
-  }, []);
+  }, [isMobile]);
 
-  // Enhanced scroll experience with subtle parallax effect - disabled on mobile
-  const handleScroll = () => {
-    // Skip parallax effects on mobile for better performance
-    if (isMobile) return;
+  // Optimized scroll handler with performance considerations
+  const handleScroll = useCallback(() => {
+    // Skip parallax effects based on device performance
+    if (devicePerformance === 'low') return;
     
-    // Skip if still during initial loading to prevent choppy animations
+    // Skip if still during initial loading
     if (!initialLoadComplete) return;
     
     const currentScrollPosition = window.scrollY;
     setScrollPosition(currentScrollPosition);
     
-    const elements = document.querySelectorAll('.parallax-element');
-    
-    elements.forEach(element => {
-      // Only process elements in viewport
-      const rect = element.getBoundingClientRect();
-      const isInViewport = (
-        rect.top <= window.innerHeight &&
-        rect.bottom >= 0
-      );
+    // Only process parallax on medium and high performance devices
+    if (devicePerformance === 'high' || (devicePerformance === 'medium' && !isMobile)) {
+      const elements = document.querySelectorAll('.parallax-element');
       
-      if (!isInViewport) return;
-      
-      const speed = parseFloat(element.getAttribute('data-speed') || '0.1');
-      const direction = element.getAttribute('data-direction') || 'vertical';
-      const offset = currentScrollPosition * speed;
-      
-      if (direction === 'horizontal') {
-        (element as HTMLElement).style.transform = `translateX(${offset}px)`;
-      } else {
-        (element as HTMLElement).style.transform = `translateY(${offset}px)`;
-      }
-    });
-  };
+      elements.forEach(element => {
+        // Only process elements in viewport for performance
+        const rect = element.getBoundingClientRect();
+        const isInViewport = (
+          rect.top <= window.innerHeight &&
+          rect.bottom >= 0
+        );
+        
+        if (!isInViewport) return;
+        
+        const speed = parseFloat(element.getAttribute('data-speed') || '0.1');
+        const direction = element.getAttribute('data-direction') || 'vertical';
+        const offset = currentScrollPosition * speed;
+        
+        if (direction === 'horizontal') {
+          (element as HTMLElement).style.transform = `translateX(${offset}px)`;
+        } else {
+          (element as HTMLElement).style.transform = `translateY(${offset}px)`;
+        }
+      });
+    }
+  }, [devicePerformance, initialLoadComplete, isMobile]);
   
-  // Setup scroll handler with debounce for better performance
+  // Setup optimized scroll handler with proper cleanup
   useEffect(() => {
-    let scrollTimeout: number | null = null;
-    let lastScrollPos = 0;
     let ticking = false;
     
     const onScroll = () => {
-      lastScrollPos = window.scrollY;
-      
       if (!ticking) {
         window.requestAnimationFrame(() => {
           handleScroll();
           ticking = false;
         });
-        
         ticking = true;
       }
     };
@@ -142,15 +196,38 @@ function App() {
     
     return () => {
       window.removeEventListener('scroll', onScroll);
-      if (scrollTimeout) {
-        window.cancelAnimationFrame(scrollTimeout);
+    };
+  }, [handleScroll]);
+  
+  // Dynamically add theme class for dark mode support
+  useEffect(() => {
+    // Check user preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    // Listen for changes
+    const darkModeListener = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
     };
-  }, [isMobile, initialLoadComplete]);
+    
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    darkModeMediaQuery.addEventListener('change', darkModeListener);
+    
+    return () => {
+      darkModeMediaQuery.removeEventListener('change', darkModeListener);
+    };
+  }, []);
   
   return (
     <div className="min-h-screen bg-black text-white relative">
-      <BackgroundPattern isMobile={isMobile} />
+      <BackgroundPattern 
+        isMobile={isMobile || devicePerformance === 'low'} 
+      />
       <Navbar />
       <main className="relative z-10">
         <Hero />

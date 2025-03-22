@@ -94,7 +94,7 @@ const PartnerTypeHeading = ({ title, color }) => {
     <ScrollAnimation animation="luxury-fade">
       <div className="text-center mb-12">
         <div className="relative inline-block">
-          <h3 className={`text-2xl sm:text-3xl font-light tracking-wide text-transparent bg-clip-text bg-gradient-to-r ${getGradient()}`}>
+          <h3 className={`text-2xl sm:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r ${getGradient()} font-inter`}>
             {title}
           </h3>
           <div className="mt-3">
@@ -128,11 +128,11 @@ const Sponsors = () => {
       <div className="container mx-auto px-4 relative z-20">
         <ScrollAnimation animation="luxury-fade">
           <div className="text-center mb-20">
-            <h2 className="text-3xl sm:text-4xl font-light text-white mb-3 tracking-tight">
-              <span className="font-medium">Our</span> <span className="font-light">Partners</span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight font-inter">
+              <span className="font-bold">Our</span> <span className="font-light">Partners</span>
             </h2>
             <LuxuryDivider className="mx-auto mb-6" />
-            <p className="text-lg text-white/80 max-w-3xl mx-auto font-light tracking-wide">
+            <p className="text-lg text-white/80 max-w-3xl mx-auto font-light tracking-wide font-inter">
               Prestigious organizations supporting TEDxASPU 2025 with a shared commitment to spreading innovative ideas.
             </p>
           </div>
@@ -140,7 +140,7 @@ const Sponsors = () => {
 
         {/* Platinum Partners */}
         <div className="mb-24">
-          <PartnerTypeHeading title="Platinum Partners" color="platinum" />
+          <PartnerTypeHeading title="PLATINUM PARTNERS" color="platinum" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <SponsorCard delay={100} type="platinum" />
             <SponsorCard delay={200} type="platinum" />
@@ -150,7 +150,7 @@ const Sponsors = () => {
 
         {/* Gold Partners */}
         <div className="mb-24">
-          <PartnerTypeHeading title="Gold Partners" color="gold" />
+          <PartnerTypeHeading title="GOLD PARTNERS" color="gold" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <SponsorCard delay={400} type="gold" />
             <SponsorCard delay={500} type="gold" />
@@ -160,7 +160,7 @@ const Sponsors = () => {
 
         {/* Silver Partners */}
         <div>
-          <PartnerTypeHeading title="Silver Partners" color="silver" />
+          <PartnerTypeHeading title="SILVER PARTNERS" color="silver" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <SponsorCard delay={700} type="silver" />
             <SponsorCard delay={800} type="silver" />

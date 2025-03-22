@@ -1,17 +1,7 @@
 import React from 'react';
-import { Users2, Lightbulb, Globe2, Clock } from 'lucide-react';
+import { Users2, Lightbulb, Globe2, Clock, Calendar } from 'lucide-react';
 import { ScrollAnimation } from './BackgroundPattern';
-
-// Apple-inspired decorative element component
-const LuxuryDivider = ({ className = '' }) => (
-  <div className={`relative flex items-center justify-center ${className}`}>
-    <div className="h-px w-16 bg-gradient-to-r from-transparent via-red-500/60 to-transparent"></div>
-    <div className="mx-3">
-      <div className="w-1 h-1 bg-red-500/60 rounded-full"></div>
-    </div>
-    <div className="h-px w-16 bg-gradient-to-l from-transparent via-red-500/60 to-transparent"></div>
-  </div>
-);
+import LuxuryDivider from './LuxuryDivider';
 
 const About = () => {
   return (
@@ -64,36 +54,9 @@ const About = () => {
                   </div>
                 </div>
                 <h3 className="text-3xl font-light text-white mb-2 tracking-tight">500<span className="text-red-500">+</span></h3>
-                <p className="text-white/70 font-light tracking-wide">Expected Attendees</p>
-              </div>
-              {/* Hover effect */}
-              <div className="absolute inset-0 bg-gradient-to-t from-red-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-            </div>
-          </ScrollAnimation>
-
-          <ScrollAnimation animation="fade-up" delay={200}>
-            <div className="relative bg-black/40 backdrop-blur-lg border border-white/5 p-8 rounded-2xl text-center overflow-hidden shadow-luxury-sm group hover:shadow-luxury-md transition-all duration-500">
-              {/* Corner accents */}
-              <div className="absolute top-0 left-0 w-8 h-8 overflow-hidden">
-                <div className="absolute top-0 left-0 w-px h-8 bg-gradient-to-b from-red-500/40 to-transparent"></div>
-                <div className="absolute top-0 left-0 w-8 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
-              </div>
-              <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden">
-                <div className="absolute top-0 right-0 w-px h-8 bg-gradient-to-b from-red-500/40 to-transparent"></div>
-                <div className="absolute top-0 right-0 w-8 h-px bg-gradient-to-l from-red-500/40 to-transparent"></div>
+                <p className="text-white/70 font-light tracking-wide">Attendees</p>
               </div>
               
-              <div className="relative">
-                <div className="relative w-16 h-16 mx-auto mb-6">
-                  <div className="absolute inset-0 bg-red-900/10 rounded-full blur-md"></div>
-                  <div className="absolute inset-0 border border-red-500/20 rounded-full"></div>
-                  <div className="relative h-full flex items-center justify-center">
-                    <Lightbulb className="w-8 h-8 text-red-500" />
-                  </div>
-                </div>
-                <h3 className="text-3xl font-light text-white mb-2 tracking-tight">15<span className="text-red-500">+</span></h3>
-                <p className="text-white/70 font-light tracking-wide">Inspiring Speakers</p>
-          </div>
               {/* Hover effect */}
               <div className="absolute inset-0 bg-gradient-to-t from-red-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             </div>
@@ -116,12 +79,43 @@ const About = () => {
                   <div className="absolute inset-0 bg-red-900/10 rounded-full blur-md"></div>
                   <div className="absolute inset-0 border border-red-500/20 rounded-full"></div>
                   <div className="relative h-full flex items-center justify-center">
-                    <Globe2 className="w-8 h-8 text-red-500" />
+                    <Calendar className="w-8 h-8 text-red-500" />
                   </div>
                 </div>
-                <h3 className="text-3xl font-light text-white mb-2 tracking-tight">4</h3>
-                <p className="text-white/70 font-light tracking-wide">Unique Tracks</p>
-          </div>
+                <h3 className="text-3xl font-light mb-2 tracking-tight">July 7<span style={{ color: 'rgb(var(--color-accent))' }}>, 2025</span></h3>
+                <p className="font-light tracking-wide opacity-70">Mark Your Calendar</p>
+              </div>
+              
+              {/* Hover effect */}
+              <div className="absolute inset-0 bg-gradient-to-t from-red-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            </div>
+          </ScrollAnimation>
+          
+          {/* Speakers */}
+          <ScrollAnimation animation="fade-up" delay={600} className="h-full">
+            <div className="relative bg-black/40 backdrop-blur-lg border border-white/5 p-8 rounded-2xl text-center overflow-hidden shadow-luxury-sm group hover:shadow-luxury-md transition-all duration-500 h-full">
+              {/* Corner accents */}
+              <div className="absolute top-0 left-0 w-8 h-8 overflow-hidden">
+                <div className="absolute top-0 left-0 w-px h-8 bg-gradient-to-b from-red-500/40 to-transparent"></div>
+                <div className="absolute top-0 left-0 w-8 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
+              </div>
+              <div className="absolute top-0 right-0 w-8 h-8 overflow-hidden">
+                <div className="absolute top-0 right-0 w-px h-8 bg-gradient-to-b from-red-500/40 to-transparent"></div>
+                <div className="absolute top-0 right-0 w-8 h-px bg-gradient-to-l from-red-500/40 to-transparent"></div>
+              </div>
+              
+              <div className="relative">
+                <div className="relative w-16 h-16 mx-auto mb-6">
+                  <div className="absolute inset-0 bg-red-900/10 rounded-full blur-md"></div>
+                  <div className="absolute inset-0 border border-red-500/20 rounded-full"></div>
+                  <div className="relative h-full flex items-center justify-center">
+                    <Lightbulb className="w-8 h-8 text-red-500" />
+                  </div>
+                </div>
+                <h3 className="text-3xl font-light mb-2 tracking-tight">15<span className="text-red-500">+</span></h3>
+                <p className="font-light tracking-wide opacity-70">Inspiring Speakers</p>
+              </div>
+              
               {/* Hover effect */}
               <div className="absolute inset-0 bg-gradient-to-t from-red-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             </div>
@@ -149,7 +143,8 @@ const About = () => {
                 </div>
                 <h3 className="text-3xl font-light text-white mb-2 tracking-tight">8</h3>
                 <p className="text-white/70 font-light tracking-wide">Hours of Content</p>
-          </div>
+              </div>
+              
               {/* Hover effect */}
               <div className="absolute inset-0 bg-gradient-to-t from-red-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             </div>
@@ -188,7 +183,7 @@ const About = () => {
                     </span>
                   </div>
                 </a>
-          </div>
+              </div>
             </div>
           </ScrollAnimation>
           
@@ -215,8 +210,8 @@ const About = () => {
                 
                 <p className="text-2xl font-light tracking-wider relative z-10">July <span className="font-medium">7</span>, 2025</p>
                 <p className="text-sm text-white/80 font-light tracking-wider relative z-10">Mark Your Calendar</p>
+              </div>
             </div>
-          </div>
           </ScrollAnimation>
         </div>
       </div>
