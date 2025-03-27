@@ -53,7 +53,7 @@ const About = () => {
                     <Users2 className="w-8 h-8 text-red-500" />
                   </div>
                 </div>
-                <h3 className="text-3xl font-light text-white mb-2 tracking-tight">500<span className="text-red-500">+</span></h3>
+                <h3 className="text-3xl font-light text-white mb-2 tracking-tight">300<span className="text-red-500">+</span></h3>
                 <p className="text-white/70 font-light tracking-wide">Attendees</p>
               </div>
               
@@ -112,7 +112,7 @@ const About = () => {
                     <Lightbulb className="w-8 h-8 text-red-500" />
                   </div>
                 </div>
-                <h3 className="text-3xl font-light mb-2 tracking-tight">15<span className="text-red-500">+</span></h3>
+                <h3 className="text-3xl font-light mb-2 tracking-tight">10</h3>
                 <p className="font-light tracking-wide opacity-70">Inspiring Speakers</p>
               </div>
               
