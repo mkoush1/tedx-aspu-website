@@ -88,16 +88,16 @@ const Hero = () => {
   });
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+  const [isHighEndDevice, setIsHighEndDevice] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [isHighEndDevice, setIsHighEndDevice] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const targetDate = useRef(new Date('2025-07-07T00:00:00'));
   
-  // Device and performance detection with better accuracy
+  // Device detection and setup
   useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
@@ -117,18 +117,16 @@ const Hero = () => {
     checkDevice();
     window.addEventListener('resize', checkDevice);
     
-    // Add load event with progressive enhancement
+    // Add load event with consistent enhancement
     const loadTimer = setTimeout(() => {
       setIsLoaded(true);
       document.body.classList.add('content-loaded');
-    }, isMobile ? 300 : 500);
+    }, 500);
     
     // Scroll detection - only track if scrolled (for performance)
     const handleScroll = () => {
       if (!hasScrolled && window.scrollY > 50) {
         setHasScrolled(true);
-        
-        // Once scrolled, remove listener to save resources
         window.removeEventListener('scroll', handleScroll);
       }
     };
@@ -144,8 +142,51 @@ const Hero = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isMobile]);
-  
+  }, [hasScrolled, isMobile]);
+
+  // Add a video loading handler to ensure it plays on mobile
+  useEffect(() => {
+    if (videoRef.current) {
+      const video = videoRef.current;
+      
+      // Force video play on load
+      const playVideo = () => {
+        video.play().catch(err => {
+          console.error("Video playback failed", err);
+          // Add fallback background if video fails
+          video.style.display = 'none';
+        });
+      };
+
+      // Handle video loading errors
+      const handleError = () => {
+        console.error("Video loading failed");
+        video.style.display = 'none';
+      };
+      
+      video.addEventListener('error', handleError);
+      
+      // Try to play on load
+      playVideo();
+      
+      // Also try to play on user interaction
+      const handleInteraction = () => {
+        playVideo();
+        document.removeEventListener('touchstart', handleInteraction);
+        document.removeEventListener('click', handleInteraction);
+      };
+      
+      document.addEventListener('touchstart', handleInteraction);
+      document.addEventListener('click', handleInteraction);
+      
+      return () => {
+        video.removeEventListener('error', handleError);
+        document.removeEventListener('touchstart', handleInteraction);
+        document.removeEventListener('click', handleInteraction);
+      };
+    }
+  }, []);
+
   // Optimized countdown timer with performance considerations
   const updateCountdown = useCallback(() => {
     const now = new Date();
@@ -162,68 +203,23 @@ const Hero = () => {
     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
     
     setCountdown({ days, hours, minutes, seconds });
-    
-    // Request next frame - more efficient than setInterval
-    animationFrameRef.current = requestAnimationFrame(() => {
-      // Only update seconds frequently if user hasn't scrolled and isn't on mobile
-      if (!hasScrolled && !isMobile) {
-        updateCountdown();
-      }
-    });
-  }, [hasScrolled, isMobile]);
+  }, []);
 
-  // Set up and clean up the countdown timer with adaptive refresh rate
+  // Set up and clean up the countdown timer
   useEffect(() => {
+    // Initial update
     updateCountdown();
     
-    // Use different update intervals based on device and scroll state
-    let interval;
-    if (hasScrolled || isMobile) {
-      // Slower updates for better performance on mobile or when not in view
-      const intervalTime = isMobile ? 60000 : 30000; // 1 minute for mobile, 30 seconds otherwise
-      interval = setInterval(updateCountdown, intervalTime);
-    } else if (isTablet) {
-      // Medium frequency for tablets
-      interval = setInterval(updateCountdown, 10000); // 10 seconds
-    }
+    // Update every second
+    const interval = setInterval(updateCountdown, 1000);
     
     return () => {
-      if (interval) clearInterval(interval);
+      clearInterval(interval);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [updateCountdown, hasScrolled, isMobile, isTablet]);
-
-  // Optimized video background loading
-  useEffect(() => {
-    // Lazy load YouTube video with intersection observer
-    if (videoRef.current) {
-      // Only load video on desktop or high-end mobile devices
-      if (isMobile && !isHighEndDevice) {
-        // Don't load video on low-end mobile devices
-        return;
-      }
-      
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && entry.target instanceof HTMLVideoElement) {
-            if (!entry.target.src) {
-              // Customize video quality based on device
-              const quality = isMobile ? 'low' : 'medium';
-              
-              entry.target.src = `https://media-hosting.imagekit.io//d363ebe62e1b422f/video-output-7DA270A3-826C-45AF-A51E-4A2B9DE84B17-1.mov?Expires=1837196846&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=xNwInVQ8on2NpL2now08jFbNoqI~H3cKGPoWBlVwCG5rjsPUWAsxzgkI-5rhfwC51HAdG3AHmP7PDezj0mAodBKvxGWAI36SSKYNNy2qG3ETqQoLPrie4nyBrHmfbBz2zmjZwHQj33COVhJEQnC1Z~p1PvW4NormbDEsR2Rqf~rayv0St2cSmHBwOMqBzOjW3pVa59TeT~sa~M~XxFi09UybsJNfFDTaF7x7LTVkKrbG3u1lg0z98XHBLsLdKXbwsrPnSj8z-xUcHNeU43N2FqZqmLwhdZi9O4KO-a-2ru64NCWiiSLQ2i3CNcbj9vVsTFLjtkNTPmjOTWiN95jNPw__`;
-            }
-            observer.unobserve(entry.target);
-          }
-        },
-        { threshold: 0.1 }
-      );
-      
-      observer.observe(videoRef.current);
-      return () => observer.disconnect();
-    }
-  }, [isMobile, isHighEndDevice]);
+  }, [updateCountdown]);
 
   return (
     <section 
@@ -234,27 +230,29 @@ const Hero = () => {
     >
       {/* Video background with optimized loading */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-black">
-        {(!isMobile || isHighEndDevice) && (
-          <video
-            ref={videoRef as any}
-            className="absolute w-full h-full object-cover scale-110 origin-center"
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              filter: isMobile ? 'brightness(0.5)' : 'brightness(0.6) contrast(1.1)',
-            }}
-          >
-            <source 
-              src="https://media-hosting.imagekit.io//d363ebe62e1b422f/video-output-7DA270A3-826C-45AF-A51E-4A2B9DE84B17-1.mov?Expires=1837196846&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=xNwInVQ8on2NpL2now08jFbNoqI~H3cKGPoWBlVwCG5rjsPUWAsxzgkI-5rhfwC51HAdG3AHmP7PDezj0mAodBKvxGWAI36SSKYNNy2qG3ETqQoLPrie4nyBrHmfbBz2zmjZwHQj33COVhJEQnC1Z~p1PvW4NormbDEsR2Rqf~rayv0St2cSmHBwOMqBzOjW3pVa59TeT~sa~M~XxFi09UybsJNfFDTaF7x7LTVkKrbG3u1lg0z98XHBLsLdKXbwsrPnSj8z-xUcHNeU43N2FqZqmLwhdZi9O4KO-a-2ru64NCWiiSLQ2i3CNcbj9vVsTFLjtkNTPmjOTWiN95jNPw__" 
-              type="video/quicktime"
-            />
-          </video>
-        )}
+        {/* Mobile-optimized fallback background */}
+        <div className="absolute inset-0 bg-black z-0"></div>
         
-        {/* Fallback background color/image for mobile or when video fails */}
-        <div className="absolute inset-0 bg-black opacity-60"></div>
+        {/* Video element */}
+        <video
+          ref={videoRef}
+          className="absolute w-full h-full object-cover scale-110 origin-center z-10"
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{
+            filter: isMobile ? 'brightness(0.4) contrast(1.2)' : 'brightness(0.6) contrast(1.1)',
+          }}
+        >
+          <source 
+            src="https://media-hosting.imagekit.io//d363ebe62e1b422f/video-output-7DA270A3-826C-45AF-A51E-4A2B9DE84B17-1.mov?Expires=1837196846&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=xNwInVQ8on2NpL2now08jFbNoqI~H3cKGPoWBlVwCG5rjsPUWAsxzgkI-5rhfwC51HAdG3AHmP7PDezj0mAodBKvxGWAI36SSKYNNy2qG3ETqQoLPrie4nyBrHmfbBz2zmjZwHQj33COVhJEQnC1Z~p1PvW4NormbDEsR2Rqf~rayv0St2cSmHBwOMqBzOjW3pVa59TeT~sa~M~XxFi09UybsJNfFDTaF7x7LTVkKrbG3u1lg0z98XHBLsLdKXbwsrPnSj8z-xUcHNeU43N2FqZqmLwhdZi9O4KO-a-2ru64NCWiiSLQ2i3CNcbj9vVsTFLjtkNTPmjOTWiN95jNPw__" 
+            type="video/mp4"
+          />
+        </video>
+
+        {/* Overlay gradient for better text readability */}
+        <div className={`absolute inset-0 bg-gradient-to-b ${isMobile ? 'from-black/80 via-black/70 to-black/80' : 'from-black/70 via-black/60 to-black/70'} z-20`}></div>
       </div>
       
       {/* Premium subtle overlay - optimized for different devices */}
@@ -281,7 +279,7 @@ const Hero = () => {
       {/* Universal gradient overlays - works on all devices */}
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black to-transparent"></div>
       
-      <div className="container mx-auto px-4 sm:px-6 relative z-20 flex flex-col items-center justify-center min-h-[100svh]">
+      <div className="container mx-auto px-4 sm:px-6 relative z-30 flex flex-col items-center justify-center min-h-[100svh]">
         {/* Main content wrapper */}
         <div className="flex flex-col items-center justify-center -mt-16 sm:-mt-20 stagger-fade loaded">
           {/* TEDxASPU Logo */}
@@ -291,7 +289,7 @@ const Hero = () => {
                 <img 
                   src="https://media-hosting.imagekit.io//0175c99f3d9242af/logo-white.png?Expires=1836924074&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=EfdL9paqXHQxuaYE5TxpvCDTGtk09skcFJSYPC4NHSEjkwdaLIO4QH0grD9XBkVF6088uCF67UN67Ne~hsmirDsYNtF2VOazQe8vO5LKfKqxYfEx3bMEaeaA5dixkgWWd4y9HqjgKuLPnRd44QhqLQs0phFNtZk-IlpVoQ6P2gfYfSp5G8w0B6IzxpxqUVJN1G6XCdRkDX~M7zQ3wjaQgeD~woV1fHY7x1ut5ACbDgN3XLTj4dbJnCZl8965KqB31zN0L27mylSC7ecuMqsQpGfj5pb6yFnlg~uQZ9Pr~j0YLnFmQZLII77qAbddEV1iQZNUuSpK47erD6E4QrXGNQ__"
                   alt="TEDxASPU Logo"
-                  className="h-12 sm:h-16 md:h-20 w-auto premium-image"
+                  className="h-12 sm:h-16 md:h-20 w-auto"
                   loading="eager"
                   width={isMobile ? 120 : 180}
                   height={isMobile ? 40 : 60}
@@ -316,56 +314,50 @@ const Hero = () => {
           </ScrollAnimation>
 
           {/* Event date */}
-          <ScrollAnimation animation="fade-up" delay={500} rootMargin="0px 0px 50px 0px">
-            <h2 className="text-lg sm:text-xl text-white/80 font-light tracking-wider mb-6 sm:mb-10">JULY 7, 2025</h2>
-          </ScrollAnimation>
+          <div className="text-lg sm:text-xl text-white/80 font-light tracking-wider mb-6 sm:mb-10">
+            JULY 7, 2025
+          </div>
           
-          {/* Countdown Timer - Optimized rendering */}
-          <ScrollAnimation animation="fade-up" delay={700} rootMargin="0px 0px 50px 0px">
-            <div className="grid grid-cols-4 gap-3 sm:gap-4 md:gap-5 mb-8 sm:mb-10">
-              <CountdownUnit value={countdown.days} label="Days" delay={0} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
-              <CountdownUnit value={countdown.hours} label="Hours" delay={100} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
-              <CountdownUnit value={countdown.minutes} label="Minutes" delay={200} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
-              <CountdownUnit value={countdown.seconds} label="Seconds" delay={300} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
-            </div>
-          </ScrollAnimation>
+          {/* Countdown Timer - without ScrollAnimation wrapper */}
+          <div className="grid grid-cols-4 gap-3 sm:gap-4 md:gap-5 mb-8 sm:mb-10">
+            <CountdownUnit value={countdown.days} label="DAYS" delay={0} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
+            <CountdownUnit value={countdown.hours} label="HOURS" delay={100} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
+            <CountdownUnit value={countdown.minutes} label="MINUTES" delay={200} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
+            <CountdownUnit value={countdown.seconds} label="SECONDS" delay={300} isMobile={isMobile} isHighEndDevice={isHighEndDevice} />
+          </div>
           
-          {/* Event Details Summary - Location and Time */}
-          <ScrollAnimation animation="fade-up" delay={800} rootMargin="0px 0px 50px 0px">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 sm:mb-10 text-white/80">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-tedx-red-500" />
-                <span className="text-sm sm:text-base font-inter">Applied Science Private University</span>
-              </div>
-              <div className="hidden sm:block h-4 w-px bg-white/20"></div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-tedx-red-500" />
-                <span className="text-sm sm:text-base font-inter">10:00 AM - 5:00 PM</span>
-              </div>
+          {/* Event Details Summary - Location and Time - without ScrollAnimation */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 sm:mb-10 text-white/80">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-tedx-red-500" />
+              <span className="text-sm sm:text-base font-inter">Applied Science Private University</span>
             </div>
-          </ScrollAnimation>
+            <div className="hidden sm:block h-4 w-px bg-white/20"></div>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-tedx-red-500" />
+              <span className="text-sm sm:text-base font-inter">10:00 AM - 5:00 PM</span>
+            </div>
+          </div>
           
           {/* CTA Buttons */}
-          <ScrollAnimation animation="fade-up" delay={900} rootMargin="0px 0px 50px 0px">
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto">
-              <a 
-                href="#tickets"
-                className="btn-primary hover:shadow-[0_0_15px_rgba(229,69,69,0.5)] transition-all duration-300 text-center"
-                aria-label="Get Tickets"
-              >
-                <Ticket className="w-4 h-4 mr-2" />
-                Get Tickets
-              </a>
-          <a
-            href="#about"
-                className="btn-secondary transition-all duration-300 text-center"
-                aria-label="Learn More About TEDxASPU"
-          >
-                <Info className="w-4 h-4 mr-2" />
-            Learn More
-              </a>
-            </div>
-          </ScrollAnimation>
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto">
+            <a 
+              href="#tickets"
+              className="btn-primary hover:shadow-[0_0_15px_rgba(229,69,69,0.5)] transition-all duration-300 text-center"
+              aria-label="Get Tickets"
+            >
+              <Ticket className="w-4 h-4 mr-2" />
+              Get Tickets
+            </a>
+            <a
+              href="#about"
+              className="btn-secondary transition-all duration-300 text-center"
+              aria-label="Learn More About TEDxASPU"
+            >
+              <Info className="w-4 h-4 mr-2" />
+              Learn More
+            </a>
+          </div>
         </div>
 
         {/* Scroll indicator with optimized animation */}
