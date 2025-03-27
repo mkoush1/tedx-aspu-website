@@ -281,38 +281,31 @@ const Hero = () => {
       
       <div className="container mx-auto px-4 sm:px-6 relative z-30 flex flex-col items-center justify-center min-h-[100svh]">
         {/* Main content wrapper */}
-        <div className="flex flex-col items-center justify-center -mt-16 sm:-mt-20 stagger-fade loaded">
+        <div className="flex flex-col items-center justify-center -mt-16 sm:-mt-20">
           {/* TEDxASPU Logo */}
-          <ScrollAnimation animation="fade-in" delay={100} rootMargin="0px 0px 50px 0px">
-            <div className="mb-4 sm:mb-6">
-              <div className="flex items-center justify-center">
-                <img 
-                  src="https://media-hosting.imagekit.io//0175c99f3d9242af/logo-white.png?Expires=1836924074&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=EfdL9paqXHQxuaYE5TxpvCDTGtk09skcFJSYPC4NHSEjkwdaLIO4QH0grD9XBkVF6088uCF67UN67Ne~hsmirDsYNtF2VOazQe8vO5LKfKqxYfEx3bMEaeaA5dixkgWWd4y9HqjgKuLPnRd44QhqLQs0phFNtZk-IlpVoQ6P2gfYfSp5G8w0B6IzxpxqUVJN1G6XCdRkDX~M7zQ3wjaQgeD~woV1fHY7x1ut5ACbDgN3XLTj4dbJnCZl8965KqB31zN0L27mylSC7ecuMqsQpGfj5pb6yFnlg~uQZ9Pr~j0YLnFmQZLII77qAbddEV1iQZNUuSpK47erD6E4QrXGNQ__"
-                  alt="TEDxASPU Logo"
-                  className="h-12 sm:h-16 md:h-20 w-auto"
-                  loading="eager"
-                  width={isMobile ? 120 : 180}
-                  height={isMobile ? 40 : 60}
-                />
-              </div>
+          <div className="mb-4 sm:mb-6">
+            <div className="flex items-center justify-center">
+              <img 
+                src="/images/tedxaspu-logo.png"
+                alt="TEDxASPU Logo"
+                className="h-12 sm:h-16 md:h-20 w-auto object-contain"
+                loading="eager"
+                width={isMobile ? 120 : 180}
+                height={isMobile ? 40 : 60}
+              />
             </div>
-          </ScrollAnimation>
+          </div>
           
           {/* IDEAS WORTH SPREADING */}
-          <ScrollAnimation animation="fade-in" delay={300} rootMargin="0px 0px 50px 0px">
-            <div className="flex flex-col items-center gap-2">
-              <h3 className="text-xl sm:text-2xl md:text-3xl text-white/90 font-light tracking-wider mb-2">
-                Ideas Worth Spreading
-              </h3>
-              <h3 className="font-arabic text-xl sm:text-2xl md:text-3xl text-white/90 font-light tracking-wider mb-2">
-                أفكار تستحق النشر
-              </h3>
-              
-              {/* Decorative line */}
-              <div className="luxury-divider"></div>
-            </div>
-          </ScrollAnimation>
-
+          <div className="flex flex-col items-center gap-2">
+            <h3 className="text-xl sm:text-2xl md:text-3xl text-white/90 font-light tracking-wider mb-2">
+              Ideas Worth Spreading
+            </h3>
+            <h3 className="font-arabic text-xl sm:text-2xl md:text-3xl text-white/90 font-light tracking-wider mb-2">
+              أفكار تستحق النشر
+            </h3>
+          </div>
+          
           {/* Event date */}
           <div className="text-lg sm:text-xl text-white/80 font-light tracking-wider mb-6 sm:mb-10">
             JULY 7, 2025
