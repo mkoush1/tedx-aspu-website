@@ -286,7 +286,7 @@ const Hero = () => {
           <div className="mb-4 sm:mb-6">
             <div className="flex items-center justify-center">
               <img 
-                src="/images/tedxaspu-logo.png"
+                src="https://media-hosting.imagekit.io//0175c99f3d9242af/logo-white.png?Expires=1836924074&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=EfdL9paqXHQxuaYE5TxpvCDTGtk09skcFJSYPC4NHSEjkwdaLIO4QH0grD9XBkVF6088uCF67UN67Ne~hsmirDsYNtF2VOazQe8vO5LKfKqxYfEx3bMEaeaA5dixkgWWd4y9HqjgKuLPnRd44QhqLQs0phFNtZk-IlpVoQ6P2gfYfSp5G8w0B6IzxpxqUVJN1G6XCdRkDX~M7zQ3wjaQgeD~woV1fHY7x1ut5ACbDgN3XLTj4dbJnCZl8965KqB31zN0L27mylSC7ecuMqsQpGfj5pb6yFnlg~uQZ9Pr~j0YLnFmQZLII77qAbddEV1iQZNUuSpK47erD6E4QrXGNQ__"
                 alt="TEDxASPU Logo"
                 className="h-12 sm:h-16 md:h-20 w-auto object-contain"
                 loading="eager"
