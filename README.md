@@ -1,6 +1,6 @@
 # TEDxASPU 2025 Website
 
-A luxurious, Apple-inspired event website for TEDxASPU 2025. This project showcases a premium design with sleek animations, responsive layouts, and an elegant user experience.
+A luxurious, an event website for TEDxASPU 2025. This project showcases a premium design with sleek animations, responsive layouts, and an elegant user experience.
 
 ## Features
 
