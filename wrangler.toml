@@ -1,0 +1,5 @@
+name = "tedx-aspu-website"
+type = "javascript" # or "webpack" if you're using webpack
+account_id = "abukoush403@gmail.com"
+workers_dev = true
+main = "path/to/your/entry-point.js" 
