@@ -96,7 +96,7 @@ const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const targetDate = useRef(new Date('2025-07-26T00:00:00'));
+  const targetDate = useRef(new Date('2025-08-23T00:00:00'));
   
   // Device detection and setup
   useEffect(() => {
@@ -247,7 +247,7 @@ const Hero = () => {
           }}
         >
           <source 
-            src="https://media-hosting.imagekit.io//d363ebe62e1b422f/video-output-7DA270A3-826C-45AF-A51E-4A2B9DE84B17-1.mov?Expires=1837196846&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=xNwInVQ8on2NpL2now08jFbNoqI~H3cKGPoWBlVwCG5rjsPUWAsxzgkI-5rhfwC51HAdG3AHmP7PDezj0mAodBKvxGWAI36SSKYNNy2qG3ETqQoLPrie4nyBrHmfbBz2zmjZwHQj33COVhJEQnC1Z~p1PvW4NormbDEsR2Rqf~rayv0St2cSmHBwOMqBzOjW3pVa59TeT~sa~M~XxFi09UybsJNfFDTaF7x7LTVkKrbG3u1lg0z98XHBLsLdKXbwsrPnSj8z-xUcHNeU43N2FqZqmLwhdZi9O4KO-a-2ru64NCWiiSLQ2i3CNcbj9vVsTFLjtkNTPmjOTWiN95jNPw__" 
+            src="https://res.cloudinary.com/dn79b1rvu/video/upload/v1753453969/video-output-7DA270A3-826C-45AF-A51E-4A2B9DE84B17-1_fk10wc.mov" 
             type="video/mp4"
           />
         </video>
@@ -302,7 +302,7 @@ const Hero = () => {
           
           {/* Event date */}
           <div className="text-lg sm:text-xl text-white/80 font-light tracking-wider mb-6 sm:mb-10">
-            JULY 26, 2025
+            AUGUST 23, 2025
           </div>
           
           {/* Countdown Timer - without ScrollAnimation wrapper */}

@@ -313,7 +313,7 @@ const Hero = () => {
 
           {/* Event date - improved responsive text */}
           <h2 className="text-base xs:text-lg sm:text-xl md:text-2xl text-white font-light tracking-wider mb-6 sm:mb-8 md:mb-10 text-center">
-            JULY 7, 2025
+            AUGUST 23, 2025
           </h2>
           
           {/* Countdown Timer - improved responsive grid */}

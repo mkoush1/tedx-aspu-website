@@ -53,7 +53,7 @@ const About = () => {
                     <Users2 className="w-8 h-8 text-red-500" />
                   </div>
                 </div>
-                <h3 className="text-3xl font-light text-white mb-2 tracking-tight">300<span className="text-red-500">+</span></h3>
+                <h3 className="text-3xl font-light text-white mb-2 tracking-tight">400<span className="text-red-500">+</span></h3>
                 <p className="text-white/70 font-light tracking-wide">Attendees</p>
               </div>
               
@@ -82,7 +82,7 @@ const About = () => {
                     <Calendar className="w-8 h-8 text-red-500" />
                   </div>
                 </div>
-                <h3 className="text-3xl font-light mb-2 tracking-tight">July 26<span style={{ color: 'rgb(var(--color-accent))' }}>, 2025</span></h3>
+                <h3 className="text-3xl font-light mb-2 tracking-tight">August 23<span style={{ color: 'rgb(var(--color-accent))' }}>, 2025</span></h3>
                 <p className="font-light tracking-wide opacity-70">Mark Your Calendar</p>
               </div>
               
@@ -208,7 +208,7 @@ const About = () => {
                 <div className="absolute bottom-2 left-2 w-0.5 h-0.5 rounded-full bg-red-300/60"></div>
                 <div className="absolute bottom-2 right-2 w-0.5 h-0.5 rounded-full bg-red-300/60"></div>
                 
-                <p className="text-2xl font-light tracking-wider relative z-10">July <span className="font-medium">26</span>, 2025</p>
+                <p className="text-2xl font-light tracking-wider relative z-10">August <span className="font-medium">23</span>, 2025</p>
                 <p className="text-sm text-white/80 font-light tracking-wider relative z-10">Mark Your Calendar</p>
               </div>
             </div>

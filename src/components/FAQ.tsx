@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     question: "When and where is the event?",
-    answer: "The event will take place on July 26, 2025, from 9:00 AM to 5:00 PM at the Conference Palace, ASPU. The venue is equipped with state-of-the-art facilities and is easily accessible by public transportation. Detailed directions and parking information will be provided to registered attendees."
+    answer: "The event will take place on AUGUST 23, 2025, from 9:00 AM to 5:00 PM at the Conference Palace, ASPU. The venue is equipped with state-of-the-art facilities and is easily accessible by public transportation. Detailed directions and parking information will be provided to registered attendees."
   },
   {
     question: "How can I get tickets?",
