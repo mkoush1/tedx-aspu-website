@@ -121,16 +121,19 @@ const Navbar = () => {
               ))}
               
               {/* Get Tickets Button */}
-              <button
-                className="relative ml-1 px-6 py-2.5 text-white text-sm lg:text-base font-medium rounded-full group overflow-hidden cursor-not-allowed"
+              <a
+                href="https://forms.gle/M3BTsmWRoH49FmoW9"
+                className="relative ml-1 px-6 py-2.5 text-white text-sm lg:text-base font-medium rounded-full group overflow-hidden"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-red-700/90 to-red-800/90 group-hover:from-red-800/90 group-hover:to-red-900/90 transition-colors duration-300"></span>
                 <span className="absolute inset-0 border border-red-500/30 rounded-full"></span>
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Ticket className="w-4 h-4" />
-                  <span>Coming Soon</span>
+                  <span>Buy Tickets</span>
                 </span>
-              </button>
+              </a>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -177,19 +180,22 @@ const Navbar = () => {
           ))}
           
           {/* Get Tickets Button */}
-          <button
+          <a
+            href="https://forms.gle/M3BTsmWRoH49FmoW9"
             className={`
               mt-4 px-8 py-3 bg-gradient-to-r from-red-700/90 to-red-800/90 hover:from-red-800/90 hover:to-red-900/90 
               text-white text-lg font-medium rounded-full border border-red-500/30
-              transform transition-all duration-300 w-full cursor-not-allowed
+              transform transition-all duration-300 w-full
               ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
               flex items-center justify-center gap-2
             `}
             style={{ transitionDelay: `${navItems.length * 50 + 50}ms` }}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <Ticket className="w-4 h-4" />
-            <span>Coming Soon</span>
-          </button>
+            <span>Buy Tickets</span>
+          </a>
         </div>
       </div>
     </>

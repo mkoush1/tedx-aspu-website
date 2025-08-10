@@ -243,7 +243,7 @@ const Hero = () => {
           loop
           playsInline
           style={{
-            filter: isMobile ? 'brightness(0.4) contrast(1.2)' : 'brightness(0.6) contrast(1.1)',
+            filter: isMobile ? 'brightness(0.4) contrast(1.2)' : 'brightness(0.6) contrast(1.1)'
           }}
         >
           <source 
@@ -328,13 +328,16 @@ const Hero = () => {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto">
-            <button 
-              className="btn-primary hover:shadow-[0_0_15px_rgba(229,69,69,0.5)] transition-all duration-300 text-center cursor-not-allowed"
-              aria-label="Tickets Coming Soon"
+            <a
+              href="https://forms.gle/M3BTsmWRoH49FmoW9"
+              className="btn-primary hover:shadow-[0_0_15px_rgba(229,69,69,0.5)] transition-all duration-300 text-center"
+              aria-label="Buy Tickets"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Ticket className="w-4 h-4 mr-2" />
-              Coming Soon
-            </button>
+              Buy Tickets
+            </a>
             <a
               href="#about"
               className="btn-secondary transition-all duration-300 text-center"
